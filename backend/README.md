@@ -70,7 +70,7 @@ uv run python manage.py populate_weather_data --stations-only
 uv run python manage.py populate_weather_data --skip-daily
 
 # Utiliser un seed specifique pour la reproductibilite
-uv run python manage.py populate_weather_data --seed 123zfezffze
+uv run python manage.py populate_weather_data --seed 123zfezffzedsfdsfs
 ```
 
 Les donnees generees incluent 15 stations francaises avec des mesures realistes :
