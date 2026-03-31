@@ -12,24 +12,6 @@ jobs:
   backend:
     name: Backend lint, test, audit
     runs-on: ubuntu-latest
-    env:
-      DB_HOST: timescaledb
-      DB_PORT: 5432
-      DB_NAME: meteodb
-      DB_USER: infoclimat
-      DB_PASSWORD: infoclimat2026
-    services:
-      timescaledb:
-        image: timescale/timescaledb:2.25.0-pg17
-        env:
-          POSTGRES_USER: infoclimat
-          POSTGRES_PASSWORD: infoclimat2026
-          POSTGRES_DB: meteodb
-        options: >-
-          --health-cmd "pg_isready -U infoclimat -d meteodb"
-          --health-interval 10s
-          --health-timeout 20s
-          --health-retries 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -54,7 +36,13 @@ jobs:
 
       - name: Backend tests
         working-directory: backend
-        run: uv run pytest
+        run: |
+          DB_HOST=timescaledb \
+          DB_PORT=5432 \
+          DB_NAME=meteodb \
+          DB_USER=infoclimat \
+          DB_PASSWORD=infoclimat2026 \
+          uv run pytest
 
       - name: Backend security audit
         working-directory: backend
