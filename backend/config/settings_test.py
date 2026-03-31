@@ -1,4 +1,5 @@
-from .settings import *
+from .settings import *  # noqa: F403
+from .settings import BASE_DIR
 
 # Use SQLite for tests to avoid requiring TimescaleDB.
 DATABASES = {
