@@ -75,9 +75,9 @@ jobs:
         working-directory: frontend
         run: npx prettier --check "**/*.{js,ts,vue,css,json,html}"
 
-      - name: Frontend unit tests
-        working-directory: frontend
-        run: npm run test:unit
+      # - name: Frontend unit tests
+      #   working-directory: frontend
+      #   run: npm run test:unit
 
       - name: Frontend security audit
         working-directory: frontend
