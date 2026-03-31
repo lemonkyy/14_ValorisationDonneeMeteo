@@ -1,5 +1,8 @@
 name: CI
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   pull_request:
   push:
@@ -25,7 +28,7 @@ jobs:
 
       - name: Install backend dependencies
         working-directory: backend
-        run: uv sync --frozen
+        run: uv sync --frozen --extra dev
 
       - name: Backend lint
         working-directory: backend
@@ -50,7 +53,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install frontend dependencies
