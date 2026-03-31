@@ -46,7 +46,7 @@ jobs:
 
       - name: Backend security audit
         working-directory: backend
-        run: pip-audit --format=plain --fail-on=medium
+        run: pip-audit --fail-on=medium
 
   frontend:
     name: Frontend lint, test, audit
