@@ -7,6 +7,8 @@ from pathlib import Path
 
 import environ
 
+import os
+
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,6 +42,8 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # Local apps
     "weather",
+    #metrics 
+    "django_prometheus",
 ]
 
 # Add django-extensions in development
@@ -47,6 +51,7 @@ if DEBUG:
     INSTALLED_APPS += ["django_extensions"]
 
 MIDDLEWARE = [
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -56,6 +61,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -155,4 +161,18 @@ SPECTACULAR_SETTINGS = {
         {"name": "Temps Reel", "description": "Donnees horaires en temps reel"},
         {"name": "Quotidien", "description": "Donnees journalieres agregees"},
     ],
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
 }

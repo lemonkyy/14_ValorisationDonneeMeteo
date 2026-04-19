@@ -1,7 +1,7 @@
 services:
   timescaledb:
+    container_name: meteo_timescaledb
     image: timescale/timescaledb:2.25.0-pg17
-    container_name: timescaledb
     environment:
       POSTGRES_USER: infoclimat
       POSTGRES_PASSWORD: infoclimat2026
@@ -20,6 +20,7 @@ services:
     restart: unless-stopped
 
   nginx:
+    container_name: meteo_nginx
     image: nginx:1.29.5-alpine3.23-perl
     ports:
       - "80:80"
@@ -32,6 +33,7 @@ services:
       - app_net
 
   backend:
+    container_name: meteo_backend
     build:
       context: ./backend
     env_file:
@@ -44,6 +46,7 @@ services:
       - bd_net
 
   frontend:
+    container_name: meteo_frontend
     build:
       context: ./frontend
     env_file:
@@ -51,9 +54,42 @@ services:
     networks:
       - app_net
 
+  prometheus:
+    container_name: meteo_prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - app_net
+      - monitoring
+
+  grafana:
+    container_name: meteo_grafana
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: secure_password
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - monitoring
+    restart: unless-stopped
+
 volumes:
   timescaledb-data:
     driver: local
+  prometheus-data:
+    driver: local
+  grafana-storage:
+    driver: local
+
 networks:
   app_net:
   bd_net:
+  monitoring:
