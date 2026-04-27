@@ -1,22 +1,24 @@
-FROM node:24-alpine AS build
+FROM node:25 AS build
 
 WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
 RUN npm run build
 
-FROM node:24-alpine AS prod
+FROM dhi.io/node:25 AS prod
 
 WORKDIR /app
 
-COPY --from=build /app/.output /app/.output
+COPY --from=build --chown=node:node /app/.output /app/.output/
 
 ENV NODE_ENV=production
+
+USER node
 
 EXPOSE 3000
 
