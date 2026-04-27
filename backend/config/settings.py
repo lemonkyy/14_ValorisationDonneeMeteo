@@ -7,8 +7,6 @@ from pathlib import Path
 
 import environ
 
-import os
-
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,7 +40,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # Local apps
     "weather",
-    #metrics 
+    # metrics
     "django_prometheus",
 ]
 
